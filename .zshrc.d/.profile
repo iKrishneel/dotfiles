@@ -1,6 +1,6 @@
 POWERLEVEL9K_CUSTOM_WIFI_SIGNAL="zsh_wifi_signal"
-POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_BACKGROUND="white"
-POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_FOREGROUND="black"
+POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_BACKGROUND="154"
+POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_FOREGROUND="white"
 
 zsh_wifi_signal(){
         local output=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I)
@@ -14,7 +14,7 @@ zsh_wifi_signal(){
                 local speed=$(echo $output | grep 'lastTxRate' | awk -F': ' '{print $2}')
                 local color='%F{black}'
 
-                [[ $speed -gt 100 ]] && color='%F{black}'
+                [[ $speed -gt 100 ]] && color='%F{white}'
                 [[ $speed -lt 50 ]] && color='%F{red}'
 
                 echo -n "%{$color%}$speed Mbps \uf1eb%{%f%}" # removed char not in my PowerLine font
@@ -40,14 +40,16 @@ POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
 
 # POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context battery dir vcs)
 # POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time dir_writable ip custom_wifi_signal ram load background_jobs)
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(newline os_icon context virtualenv docker_machine custom_wifi_signal ip newline os_icon dir vcs newline os_icon openfoam status)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(newline os_icon context virtualenv docker_machine custom_wifi_signal time newline os_icon dir vcs newline os_icon status)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status dir_writable ram load background_jobs battery)
 
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
 POWERLEVEL9K_SHORTEN_DELIMITER="..."
 
 POWERLEVEL9K_TIME_FORMAT="%D{\uf017 %H:%M \uf073 %d/%m/%y}"
-POWERLEVEL9K_TIME_BACKGROUND='white'
+POWERLEVEL9K_TIME_BACKGROUND='198'
+POWERLEVEL9K_TIME_FOREGROUND='white'
+
 POWERLEVEL9K_RAM_BACKGROUND='magenta'
 POWERLEVEL9K_LOAD_CRITICAL_BACKGROUND="white"
 POWERLEVEL9K_LOAD_WARNING_BACKGROUND="white"
