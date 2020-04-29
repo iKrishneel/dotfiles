@@ -87,11 +87,11 @@ function x11_forward() {
     export DISPLAY=host.docker.internal:0
 }
 
-function scp_logos() {
+function re_scp2() {
     scp -o "ProxyCommand ssh ${SSH_USER}@$1 -W %h:%p" $SSH_USER@$2:$3
 }
 
-function scp_logos_local() {
+function re_scp() {
     scp -r $SSH_USER@$1:$2 $3
 }
 
@@ -109,3 +109,4 @@ function jupyS() {
     ssh -N -f -L $h2:$h1 ${SSH_USER}@$3
     # ssh -N -f -L "localhost:$2:localhost:$1 ${SSH_USER}@$3"
 }
+export OPENSSL_ROOT_DIR=/usr/local/opt/openssl@1.1
