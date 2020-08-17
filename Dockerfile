@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y\
         zsh \
         && pip3 install virtualenv \
         && wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
-        && git clone https://github.com/iKrishneel/dotfiles.git .dotfiles\
+	&& git clone https://github.com/iKrishneel/dotfiles.git .dotfiles\
+	&& pip3 install cpplint \
         && cp -r .dotfiles/.emacs . \
         && emacs --daemon \
         && rm -rf /var/lib/apt/lists/*

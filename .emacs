@@ -1,5 +1,5 @@
 (require 'package)
-; add MELPA to repository list
+;; add MELPA to repository list
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 
 ; initialize package.el
