@@ -110,3 +110,5 @@ function jupyS() {
     # ssh -N -f -L "localhost:$2:localhost:$1 ${SSH_USER}@$3"
 }
 export OPENSSL_ROOT_DIR=/usr/local/opt/openssl@1.1
+
+source $HOME/.dotfiles/.zshrc.d/docker.sh

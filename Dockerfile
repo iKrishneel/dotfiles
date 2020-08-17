@@ -28,4 +28,6 @@ RUN apt-get update && apt-get install -y\
         && emacs --daemon \
         && rm -rf /var/lib/apt/lists/*
 
+RUN git clone https://github.com/akash-akya/emacs-flymake-cursor.git $HOME/.emacs.d/emacs-flymake-cursor
+
 CMD tail -f /dev/null

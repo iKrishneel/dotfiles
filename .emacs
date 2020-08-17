@@ -1,14 +1,12 @@
 (require 'package)
 ; add MELPA to repository list
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 
 ; initialize package.el
 (package-initialize)
 
-
 (setq package-list '(auto-complete
 		     yasnippet
-		     auto-complete
 		     auto-complete
 		     hlinum
 		     jedi
@@ -20,7 +18,6 @@
 		     google-c-style
 		     ac-math))
 
-; list the repositories containing them
 
 ; fetch the list of packages available
 (unless package-archive-contents
@@ -61,7 +58,14 @@
 (require 'iedit)
 (define-key global-map (kbd "C-c ;") 'iedit-mode)
 
-					; turn on Semantic
+(require 'flymake)
+(require 'use-package)
+(use-package flymake-cursor
+  :load-path "~/.emacs.d/emacs-flymake-cursor"
+  :config
+  (flymake-cursor-mode))
+
+;; turn on Semantic
 (semantic-mode 1)
 (defun my:add-semantic-to-autocomplete()
   (add-to-list 'ac-sources 'ac-source-semantic)
@@ -69,7 +73,7 @@
 (add-hook 'c-mode-common-hook 'my:add-semantic-to-autocomplete)
 
 ;;enable global support for Semanticdb
-					; turn on Semantic
+;; turn on Semantic
 (semantic-mode 1)
 (defun my:add-semantic-to-autocomplete()
   (add-to-list 'ac-sources 'ac-source-semantic)
@@ -106,6 +110,7 @@
 (require 'hlinum)
 ;; (hlinum-activate)
 
+(require 'cmake-mode)
 
 (require 'auto-complete-clang)
 (require 'auto-complete-clang-async)
@@ -118,8 +123,7 @@
 (setq c-default-style "ellemtel"
       c-basic-offset 5)
 
-
-					; turn on ede mode
+;; turn on ede mode
 (global-ede-mode 1)
 (global-semantic-idle-scheduler-mode 1)
 
@@ -158,7 +162,9 @@
 	 ("\\.inc$"  . fortran-mode)
 	 ("\\.C$"    . c++-mode)
 	 ("\\.cc$"   . c++-mode)
+	 ("\\.cu$"   . c++-mode)
 	 ("\\.h$"    . c++-mode)
+	 ("\\.hpp$"    . c++-mode)
 	 ("\\.cxx$"  . c++-mode)
 	 ("\\.html$" . html-mode)
 	 )
@@ -166,9 +172,9 @@
 
 					; Set up C++ variables
 					;
-(setq c-recognize-knr-p nil)
-(add-hook 'c++-mode-hook (function (lambda () (c-set-style "Ellemtel"))))
-(add-hook 'c++-mode-hook 'font-lock-mode )
+;; (setq c-recognize-knr-p nil)
+;; (add-hook 'c++-mode-hook (function (lambda () (c-set-style "Ellemtel"))))
+;; (add-hook 'c++-mode-hook 'font-lock-mode )
 
 ;;Auto indent
 (set (make-local-variable 'aai-indent-function)
@@ -177,6 +183,9 @@
 ;; start flymake-google-cpplint-load
 ;; (require 'flymake-google-cpplint)
 ;; (add-hook 'c++-mode-hook 'flymake-google-cpplint-load)
+
+(package-install 'flycheck)
+(global-flycheck-mode)
 
 (defun my:flymake-google-init ()
   (require 'flymake-google-cpplint)
@@ -187,13 +196,15 @@
 (add-hook 'c-mode-hook 'my:flymake-google-init)
 (add-hook 'c++-mode-hook 'my:flymake-google-init)
 
-
-
 ;; start google-c-style with emacs
 (require 'google-c-style)
+(autoload 'google-set-c-style "google-c-style")
+(autoload 'google-make-newline-indent "google-c-style")
 (add-hook 'c-mode-common-hook 'google-set-c-style)
-(add-hook 'c-mode-common-hook 'google-make-newline-indent)
+(add-hook 'c++-mode-common-hook 'google-set-c-style)
 
+(add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode))
+(add-hook 'c-mode-common-hook 'google-set-c-style)
 
 (setq gc-cons-threshold 1000000)
 
@@ -204,8 +215,6 @@
 (semantic-add-system-include "/usr/include/" 'c-mode)
 (semantic-add-system-include "/usr/include/" 'c++-mode)
 
-;; C++ Mode
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (require 'cl)
 
 (defun file-in-directory-list-p (file dirlist)
@@ -237,27 +246,14 @@ the directories in the INCLUDE environment variable."
 				   (statement-case-open . +)))))
 
 (defun my-c++-mode-hook ()
-  (c-set-style "my-style")        ; use my-style defined above
+  (c-set-style "my-style")        ;; use my-style defined above
   (auto-fill-mode)
   (c-toggle-auto-hungry-state 1))
-
 (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 
-;; (define-key c++-mode-map "\C-ct" 'some-function-i-want-to-call)
-
-
-
-					; roslaunch highlighting
+;; roslaunch highlighting
 (add-to-list 'auto-mode-alist '("\\.launch$" . xml-mode))
 
-
-					;(require 'yaml-mode)
-					;    (add-to-list 'auto-mode-alist '("\\yaml$" . yaml-mode))
-
-					;(add-hook 'yaml-mode-hook
-					;      '(lambda ()
-					;        (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
-					; Add cmake listfile names to the mode list.
 (setq auto-mode-alist
       (append
        '(("CMakeLists\\.txt\\'" . cmake-mode))
@@ -265,8 +261,6 @@ the directories in the INCLUDE environment variable."
        auto-mode-alist))
 
 (autoload 'cmake-mode "/usr/share/emacs/site-lisp/cmake-mode.el" t)
-
-
 
 ;; color the entire line
 (global-hl-line-mode 1)
@@ -280,24 +274,45 @@ the directories in the INCLUDE environment variable."
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" "0c9f63c9d90d0d135935392873cd016cc1767638de92841a5b277481f1ec1f4a" "a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9" "1436d643b98844555d56c59c74004eb158dc85fc55d2e7205f8d9b8c860e177f" "6bc387a588201caf31151205e4e468f382ecc0b888bac98b2b525006f7cb3307" default)))
- '(flymake-google-cpplint-command "/usr/local/bin/cpplint")
- '(package-selected-packages
-   (quote
-    (makefile-executor dockerfile-mode docker docker-compose-mode zenburn-theme monokai-theme gruvbox-theme cyberpunk-theme html-check-frag web-mode python-docstring flycheck-pycheckers jedi-core color-theme-x yaml-tomato flymake-elixir color-theme-solarized cuda-mode pylint elpy ac-math ecb solarized-theme latex-preview-pane yatemplate yaml-mode jedi iedit hlinum google-c-style git flymake-google-cpplint flymake-cursor flymake-cppcheck el-autoyas autopair auto-yasnippet auto-complete-nxml auto-complete-exuberant-ctags auto-complete-clang-async auto-complete-clang auto-complete-chunk auto-complete-c-headers auto-auto-indent ac-c-headers))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; (custom-set-variables
+;;  ;; custom-set-variables was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(custom-safe-themes
+;;    (quote
+;;     ("a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0"
+;;      "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3"
+;;      "0c9f63c9d90d0d135935392873cd016cc1767638de92841a5b277481f1ec1f4a"
+;;      "a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9"
+;;      "1436d643b98844555d56c59c74004eb158dc85fc55d2e7205f8d9b8c860e177f"
+;;      "6bc387a588201caf31151205e4e468f382ecc0b888bac98b2b525006f7cb3307"
+;;      default))) 
+;;  '(flymake-google-cpplint-command "/usr/local/bin/cpplint")
+;;  '(package-selected-packages
+;;    (quote
+;;     (markdown-mode json-mode toml-mode cmake-mode filladapt pydoc
+;; 		   python-mode js2-mode makefile-executor
+;; 		   dockerfile-mode docker docker-compose-mode
+;; 		   zenburn-theme monokai-theme gruvbox-theme
+;; 		   cyberpunk-theme html-check-frag web-mode
+;; 		   python-docstring flycheck-pycheckers jedi-core
+;; 		   color-theme-x yaml-tomato flymake-elixir
+;; 		   color-theme-solarized cuda-mode pylint elpy ac-math
+;; 		   ecb solarized-theme latex-preview-pane yatemplate
+;; 		   yaml-mode jedi iedit hlinum google-c-style git
+;; 		   flymake-google-cpplint flymake-cursor
+;; 		   flymake-cppcheck el-autoyas autopair auto-yasnippet
+;; 		   auto-complete-nxml auto-complete-exuberant-ctags
+;; 		   auto-complete-clang-async auto-complete-clang
+;; 		   auto-complete-chunk auto-complete-c-headers
+;; 		   auto-auto-indent ac-c-headers))))
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  )
 
 ;;; Indentation for python
 
@@ -392,7 +407,7 @@ the directories in the INCLUDE environment variable."
 
 
 ;; latex setup
-(require 'flymake)
+;; (require 'flymake)
 ;; (defun flymake-get-tex-args (file-name)
 ;;   (list "pdflatex"
 ;; 	(list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
@@ -470,3 +485,31 @@ the directories in the INCLUDE environment variable."
 ;; (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+;; (custom-set-variables
+;;  ;; custom-set-variables was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(package-selected-packages
+;;    (quote
+;;     (flycheck zenburn-theme web-mode use-package toml-mode python-mode python-docstring pylint pydoc nyan-mode monokai-theme makefile-executor json-mode jedi iedit html-check-frag hlinum gruvbox-theme google-c-style flymake-python-pyflakes flymake-google-cpplint flymake-cursor flymake-cppcheck flycheck-pycheckers filladapt dockerfile-mode docker-compose-mode cyberpunk-theme color-theme-x color-theme cmake-mode autopair auto-yasnippet auto-virtualenv auto-complete-clang-async auto-complete-clang ac-math))))
+;; (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+;;  )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (flycheck zenburn-theme web-mode use-package toml-mode python-mode python-docstring pylint pydoc nyan-mode monokai-theme makefile-executor json-mode jedi iedit html-check-frag hlinum gruvbox-theme google-c-style flymake-python-pyflakes flymake-google-cpplint flymake-cursor flymake-cppcheck flycheck-pycheckers filladapt dockerfile-mode docker-compose-mode cyberpunk-theme color-theme-x color-theme cmake-mode autopair auto-yasnippet auto-virtualenv auto-complete-clang-async auto-complete-clang ac-math))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
