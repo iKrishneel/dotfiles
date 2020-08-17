@@ -26,9 +26,9 @@ RUN apt-get update && apt-get install -y\
 	&& git clone https://github.com/iKrishneel/dotfiles.git .dotfiles\
 	&& pip3 install cpplint \
         && cp -r .dotfiles/.emacs . \
-        && emacs --daemon \
         && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/akash-akya/emacs-flymake-cursor.git $HOME/.emacs.d/emacs-flymake-cursor
+RUN git clone https://github.com/akash-akya/emacs-flymake-cursor.git $HOME.emacs.d/emacs-flymake-cursor
+RUN emacs --daemon
 
 CMD tail -f /dev/null

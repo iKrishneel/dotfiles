@@ -16,6 +16,8 @@
 		     auto-complete-clang
 		     auto-complete-clang-async
 		     google-c-style
+		     use-package
+		     cmake-mode
 		     ac-math))
 
 
