@@ -16,6 +16,8 @@
 		     auto-complete-clang
 		     auto-complete-clang-async
 		     google-c-style
+		     cmake-mode
+		     grandshell-theme
 		     ac-math))
 
 ; fetch the list of packages available
@@ -313,4 +315,17 @@ the directories in the INCLUDE environment variable."
 	  (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 (load-theme 'grandshell t)
-
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (flycheck zenburn-theme web-mode use-package toml-mode solarized-theme python-mode python-docstring pylint pydoc nyan-mode monokai-theme monokai-pro-theme makefile-executor laguna-theme json-mode jedi iedit html-check-frag hlinum gruvbox-theme grandshell-theme google-c-style flymake-python-pyflakes flymake-google-cpplint flymake-cursor flymake-cppcheck flycheck-pycheckers filladapt dracula-theme dockerfile-mode docker-compose-mode cyberpunk-theme color-theme-x color-theme cmake-mode cherry-blossom-theme autopair auto-yasnippet auto-virtualenv auto-complete-clang-async auto-complete-clang ac-math))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
