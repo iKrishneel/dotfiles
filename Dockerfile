@@ -24,17 +24,17 @@ RUN apt-get update && apt-get install -y\
         && pip3 install virtualenv \
         && wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
 	&& git clone https://github.com/iKrishneel/dotfiles.git .dotfiles\
-	&& pip3 install cpplint \
+	&& pip3 install --upgrade cpplint black flake8 \
         && cp -r .dotfiles/.emacs . \
         && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/akash-akya/emacs-flymake-cursor.git $HOME.emacs.d/emacs-flymake-cursor
 RUN emacs --daemon
 
-RUN git clone https://github.com/gpakosz/.tmux.git && \
-	ln -s -f .tmux/.tmux.conf && \
-	cp .tmux/.tmux.conf.local .
+# RUN git clone https://github.com/gpakosz/.tmux.git && \
+# 	ln -s -f .tmux/.tmux.conf && \
+# 	cp .tmux/.tmux.conf.local .
 
-RUN echo '\n[[ $- != *i* ]] && return \n[[ -z "$TMUX" ]] && exec tmux\n' >> $HOME/.zshrc
+# RUN echo '\n[[ $- != *i* ]] && return \n[[ -z "$TMUX" ]] && exec tmux\n' >> $HOME/.zshrc
 
 CMD tail -f /dev/null
